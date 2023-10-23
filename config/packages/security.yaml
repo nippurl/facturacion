@@ -1,0 +1,43 @@
+security:
+    # https://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    providers:
+        our_db_provider:
+            entity:
+                class: App\Entity\Usuario
+                property: nick
+    role_hierarchy:
+
+        ROLE_SYS: ROLE_ADM
+        ROLE_ADM: ROLE_COB_ADM
+        ROLE_COB_ADM: ROLE_COB_EMP
+
+    encoders:
+        App\Entity\Usuario: plaintext
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js|logout)/
+            security: false
+
+    #    main:
+    #        pattern:    ^/$
+    #        security: false
+        privado:
+            pattern: ^/
+            provider: our_db_provider
+            stateless:  true
+            http_basic:
+                realm: "AREA SEGURA"
+       #     logout:
+                #success_handler: logout_listener
+      #          invalidate_session: true
+       #         path: /logout
+        #        target: /
+        #        delete_cookies:
+         #           a: { path: null, domain: null }
+          #          b: { path: null, domain: null }
+                    #     logout: true
+
+    access_control:
+            # require ROLE_ADMIN for /admin*
+            - { path: ^/logout/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+            - { path: ^/admin, roles: ROLE_ADM }

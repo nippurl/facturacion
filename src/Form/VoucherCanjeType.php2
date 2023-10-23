@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Form;
+
+use App\Entity\Voucher;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class VoucherCanjeType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('numero', null,
+            [
+                'disabled' =>true,
+            ])
+            ->add('compra_fecha', null,
+                [
+                    'disabled' =>true,
+                ])
+            ->add('compra_numero', null,
+                [
+                    'disabled' =>true,
+                ])
+
+            ->add('descripcion', null,
+                [
+                    'disabled' =>true,
+                ])
+            ->add('canje_fecha', null, DocCabType::getDate())
+            ->add('canje_numero')
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => Voucher::class,
+        ]);
+    }
+}

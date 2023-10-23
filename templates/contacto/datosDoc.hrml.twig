@@ -1,0 +1,44 @@
+{# contacto \App\Entity\Contacto #}
+{% if contacto is not null %}
+
+    <div class="col-md-6 col-12">
+        <p>Nombre: {{ contacto.razon }}
+            {% if contacto.deuda >0  %}
+                <div style="color: RED" class="no-print" id="DEUDA">
+            TIENE DEUDA
+        </div>
+        <script type="text/javascript">
+            animacion = function(){
+
+                $("#DEUDA").fadeTo(500, .1)
+                    .fadeTo(500, 1);
+            }
+
+            setInterval(animacion, 1000);
+        </script>
+
+            {% endif %}
+        </p>
+        <p> Dir.:{{ contacto.direccion }}</p>
+    </div>
+    <div class="col-md-6 col-12">
+        <p>CUIL/CUIT: {{ contacto.cuil }}</p>
+        <p>Tel.:  {{ contacto.telefono }} </p>
+    </div>
+    <!-- /.col -->
+
+    <!-- /.col -->
+
+{%  else %}
+    <div class="col">
+        <p>CUIL: </p>
+        <p>Tel.: </p>
+
+    </div>
+    <div class="col">
+        <p>Nombre: Consumidor Final </p>
+        <p>Dir.:</p>
+    </div>
+    <!-- /.col -->
+
+{% endif %}

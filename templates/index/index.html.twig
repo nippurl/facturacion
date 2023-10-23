@@ -1,0 +1,25 @@
+{# @var menus  App\Entity\Menu[] #}
+{% extends 'base.html.twig' %}
+
+{% block title %} {% endblock %}
+
+{% block body %}
+    <h2>Bienvenido!!</h2>
+<div class="row">
+
+
+    {% for menu in menus %}
+        {# @var menu App\Entity\DocumentoTipo #}
+        <div class="col-lg-2 col-sm-6 col-xs-12 ">
+            <a href="{{ menu.url  }}" class="text-center">
+                {% if menu.imagen is not null %}
+                    <img src="{{ asset('img/'~menu.imagen) }}" alt="{{ menu.nombre }}" class="img-thumbnail" >
+                {% endif %}
+
+                <p>{{ menu.nombre }}</p>
+            </a></div>
+
+    {% endfor %}
+
+</div>
+{% endblock %}

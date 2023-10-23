@@ -1,0 +1,135 @@
+@import "scss/bootstrap.scss";
+@import "scss/bootstrap-grid.scss";
+@import "scss/bootstrap-reboot.scss" ;
+
+$cumplido: greenyellow;
+$postegado: #fff365;
+// Genero que los formularios no se puedan imprimir
+form{
+  @extend .no-print;
+  //@extend .col-md-6;
+  //@extend .col-sm-9;
+  //@extend .col-12;
+}
+
+
+nav{
+
+  @extend .navbar;
+  @extend .navbar-dark;
+  @extend .navbar-expand-lg;
+ // @expand  .navbar-inverse ;
+  @extend .bg-dark;
+
+}
+
+.container-fluid{
+  padding-right: 2%;
+  padding-left: 2%;
+}
+
+table.datos{
+  @extend .table;
+  @extend .table-striped;
+  .hora, .acciones{
+    text-align: center;
+  }
+  thead {
+    text-align: left;
+    @extend .thead-dark;
+  }
+  th{
+    text-align: left;
+  }
+}
+
+// Lista de ordenable
+
+ul.ordenable{
+  @extend .list-group;
+  @extend .container-fluid;
+
+  li {
+    @extend .row;
+    @extend .list-group-item;
+  }
+
+  div{
+    @extend .col;
+  }
+
+  div.acciones{
+    text-align: right;
+  }
+}
+
+a.new{
+  @extend .btn;
+  @extend .btn-primary;
+}
+
+a.exit{
+  @extend .btn;
+  @extend .btn-secondary;
+}
+
+a.edit{
+  @extend .btn;
+  @extend .btn-warning;
+}
+a.delete{
+  @extend .btn;
+  @extend .btn-danger;
+}
+a.show{
+  @extend .btn;
+  @extend .btn-success;
+}
+
+h2{
+  text-align: center;
+}
+form{
+  button[type="submit"]{
+    @extend .btn;
+    @extend .btn-success;
+  }
+}
+
+div.cuadro_datos{
+   @extend .border;
+   @extend .border-dark;
+  @extend .rounded;
+  div.linea{
+    padding: 5px;
+  }
+  div.linea :first-child{
+    text-align: center;
+    background: black;
+    color: white;
+
+  }
+  div.linea:nth-child(odd) {
+
+    background: #eeeeee;
+
+  }
+}
+
+@media print {
+  .no-print{
+    display: none;
+  }
+}
+
+.nav-link[data-toggle].collapsed:after {
+  content: "▾";
+}
+.nav-link[data-toggle]:not(.collapsed):after {
+  content: "▴";
+}
+
+.borde{
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Voucher{% endblock %}
+
+{% block body %}
+    <h1>Voucher</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Tipo</th>
+                <td>{{ voucher.voucherTipo }}</td>
+            </tr>
+            <tr>
+                <th>Numero</th>
+                <td>{{ voucher.numero }}</td>
+            </tr>
+            <tr>
+                <th>Compra_fecha</th>
+                <td>{{ voucher.compraFecha ? voucher.compraFecha|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Compra_numero</th>
+                <td>{{ voucher.compraNumero }}</td>
+            </tr>
+            <tr>
+                <th>Descripcion</th>
+                <td>{{ voucher.descripcion }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <h2>Canjes Realizados</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Numero</th>
+        <th>Fecha</th>
+        <th>Comanda</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for xx in voucher.canjes %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ xx.fecha|date('d-m-Y') }}</td>
+            <td>{{ xx.comanda }}</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+    <a href="{{ path('voucher_index') }}" class="success">Volver</a>
+
+    {% if voucher.compraFecha|date('%Y-%m-%d') == 'today'|date('%Y-%m-%d') or is_granted('ROLE_SYS') %}
+        <a href="{{ path('voucher_edit', {'id': voucher.id}) }}" class="btn btn-danger">Editar</a>
+    {% endif %}
+    {% if  voucher.canjes|length  < voucher.voucherTipo.cant %}
+        <a href="{{ path('voucher_canjear', {'id': voucher.id}) }}" class="edit">Conjear</a>
+    {% endif %}
+{% endblock %}

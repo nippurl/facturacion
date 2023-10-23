@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{# doc \App\Entity\Documento #}
+{% block body %}
+    <div id="BOLETA">
+    {{ include('documento/_cabecera.html.twig', {'doc':doc}) }}
+
+    <div id="items">
+        {{ include('item/_cuadro.html.twig',{'items':doc.items}) }}
+    </div>
+    <!-- /#items -->
+    {% if doc.tipo.pagos == 1 %}
+        <div id="pagos">
+            {{ include('pago/_cuadro.html.twig',{'pagos':doc.pagos }) }}
+        </div>
+    {% endif %}
+    </div>
+<div>
+    {{ include('documento/_acciones.html.twig',{'doc':doc}) }}
+</div>
+
+{% endblock %}
+
+{% block title %}
+Ver documento {{ doc }}
+{% endblock %}
+

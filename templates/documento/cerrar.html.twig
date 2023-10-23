@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+{% endblock %}
+
+{% block title %}
+<h1>Documento Cerrado</h1>
+    <script !src="">
+        $(document).ready(function () {
+            // Your application has indicated there's an error
+            window.setTimeout(function(){
+
+                // Move to a new location or you can do something else
+                window.location.href = "{{ path('index_index') }}";
+
+            }, 1000);
+
+        });
+
+    </script>
+{% endblock %}
+

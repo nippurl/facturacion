@@ -1,0 +1,28 @@
+{#  @var agendas App\Entity\Agenda[] #}
+<table class="table">
+    <thead>
+    <tr>
+                                    <th>Id</th>
+                                                <th>Fecha</th>
+                                                <th>Hora</th>
+                            <th>actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for agenda in agendas %}
+    <tr>
+                                    <td>{{ agenda.id }}</td>
+                                                <td>{{ agenda.fecha ? agenda.fecha|date('Y-m-d') : '' }}</td>
+                                                <td>{{ agenda.hora ? agenda.hora|date('H:i:s') : '' }}</td>
+                            <td>
+            <a href="{{ path('agenda_show', {'id': agenda.id}) }}" class="show">Ver</a>
+            <a href="{{ path('agenda_edit', {'id': agenda.id}) }}" class="edit">Editar</a>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="4">No hay registros</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

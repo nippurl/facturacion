@@ -1,0 +1,10 @@
+{# doc \App\Entity\Documento #}
+{% if (is_granted('ROLE_ADM') and doc.fecha|date('Y-m-d') == 'today'|date('Y-m-d')) or (is_granted('ROLE_SYS')) %}
+    <a href="{{ path('documento_editar',{'docId':doc.id}) }}" class="edit">Editar</a>
+    {% if doc.estado == constant('Cerrado',doc) %}
+        <a href="{{ path('documento_cancelar',{'id':doc.id}) }}" class="btn btn-danger">ANULAR</a>
+
+    {% endif %}
+
+{% endif %}
+<a href="{{ path('documento_imprimir',{'docId':doc.id}) }}" class="btn btn-success">Imprimir</a>

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lista de Productos{% endblock %}
+
+{% block body %}
+  {{ form(form) }}
+
+    <a href="{{ path('producto_new') }}" class="new float-right">Nuevo </a>
+    <h1>Lista de productos</h1>
+
+    <table class="datos">
+        <thead>
+            <tr>
+                <th>Descripcion</th>
+                <th class="d-none d-md-table-cell">Cod. Barra</th>
+                <th>Precio</th>
+
+                <th class="d-none d-md-table-cell">Candidad 1re Dep.</th>
+                <th class="text-right" width="100" style="min-width: 90px">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for producto in productos %}
+            <tr>
+                <td>{{ producto.descripcion }}</td>
+                <td class="d-none d-md-table-cell" >{{ producto.codBarra }}</td>
+                <td>{{ producto.precio }}</td>
+                <td class="d-none d-md-table-cell" >{{ producto.stock1 }}</td>
+                <td class="text-right" style="min-width: 180px" width="180px">
+                    <a href="{{ path('producto_show', {'id': producto.id}) }}" class="show">Ver</a>
+                    <a href="{{ path('producto_edit', {'id': producto.id}) }}" class="edit">Editar</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

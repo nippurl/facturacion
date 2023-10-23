@@ -1,0 +1,76 @@
+<html>
+<head>
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.structure.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.theme.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/popper.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.form.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('js/select2.min.js') }}"></script>
+    <script src="{{ asset('js/base.js') }}"></script>
+
+</head>
+<body>
+<div id="BOLETA">
+      <div id="cabecera" style="border-style: double;">
+        <div style="alignment: center; text-align: center">
+            <h1 > {{ doc.tipo.letra }}</h1>
+        </div>
+
+          {% if empresa_logo is not null %}
+              {{ include('documento/imprimir_cabecera_logo.html.twig',{'doc':doc}) }}
+              {% else %}
+                  {{ include('documento/imprimir_cabecera_sin_logo.html.twig',{'doc':doc}) }}
+          {% endif %}
+        <div id="Contacto" >
+       <table style="width: 100%" style="border-style: solid;">
+            <tr>
+            {% if doc.contacto is not null %}
+
+                    <td>
+                        <p>CUIL/CUIT: {{ doc.contacto.cuil }}</p>
+                        <p>Tel.:  {{ doc.contacto.telefono }} </p>
+                    </td>
+                    <td>
+                        <p>Nombre: {{ doc.contacto.razon }} </p>
+                        <p> Dir.:{{ doc.contacto.direccion }}</p>
+
+                    </td>
+
+            {%  else %}
+                    <td>
+                        <p>CUIL/CUIT: </p>
+                        <p>Tel.:   </p>
+                    </td>
+                    <td>
+                        <p>Nombre:  </p>
+                        <p> Dir.:</p>
+
+                    </td>
+            {% endif %}
+            </tr>
+        </table>
+        </div>
+    </div>
+
+    <div id="items" style="border-style: solid;">
+        {{ include('item/_cuadro.html.twig',{'items':doc.items}) }}
+    </div>
+    <!-- /#items -->
+    {% if doc.tipo.pagos == 1 %}
+        <div id="pagos" style="border-style: solid;">
+            {{ include('pago/_cuadro.html.twig',{'pagos':doc.pagos }) }}
+        </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

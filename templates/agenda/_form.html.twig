@@ -1,0 +1,84 @@
+{# @var form \App\Form\AgendaType #}
+{# @var agenda \App\Entity\Agenda #}
+{# @controller App:Agenda:edit #}
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-success">{{ button_label|default('Guardar') }}</button>
+{{ form_end(form) }}
+<script type="text/javascript">
+
+    function nuevoContacto() {
+        var url = '{{ path('contacto_newAjax',{'aid':agenda.id}) }}'
+        $('#aux').load(url,
+            function () {
+                $('#aux').dialog({
+
+                    buttons: {
+
+                        "Guardar": function () {
+                            $.ajax({
+                                url: url,                   //
+                                timeout: 30000,
+                                type: "POST",
+                                data: $('#form_contacto').parent().serialize(),
+                                //      dataType: 'json',
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                    alert("An error has occurred making the request: " + errorThrown + " - " + $('#form_contacto').parent().serialize())
+                                },
+                                success: function (data) {
+                                    //Do stuff here on success such as modal info
+                                    $('#aux').dialog("close");
+                                    $('#{{ form.contacto.vars.id }}').append("<option " +
+                                        //" id='" + data['id'] + "' " +
+                                        " value='"+ data['id'] + "' " +
+                                        "> " + data['nombre'] + " </option>");
+                                    $('#{{ form.contacto.vars.id }}').val(data['id']);
+                                    cargaContacto(data['id']);
+                                }
+                            });
+                        },
+                        "Cancelar": function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+
+
+            }
+        );
+    }
+    $("#form_contacto").on("submit", function (event) {
+        console.log($(this).serialize());
+        event.preventDefault();
+        //    var url = "{{ path('contacto_newAjax',{'aid':agenda.id}) }}";
+        var data = $(this).serialize();
+        $('#aux').load(url, data);
+        return false;
+    });
+
+    function guardarContacto() {
+        var url = "{{ path('contacto_newAjax',{'aid':agenda.id}) }}";
+        var data = $('#form_contacto').serialize();
+        //var data = new FormData($('#form_contacto'));
+        alert(data);
+        $('#aux').load({
+            url: url,
+            data: data,
+            type: 'post',
+        });
+    }
+
+    function cargaContacto(cod) {
+        if (cod == undefined) {
+            var conid = $('#{{ form.contacto.vars.id }}').val();
+
+        } else {
+            var conid = cod;
+        }
+        var aid = "{{ agenda.id }}";
+        var url = "{{ path('contacto_ajax') }}?id=" + conid + "&aid=" + aid;
+        // alert('Producto'+ prodid);
+
+        $("#Contacto").load(url);
+    }
+</script>

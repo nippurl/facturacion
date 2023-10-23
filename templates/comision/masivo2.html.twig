@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Cambio de Comisiones Realizados</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Vendedor</th>
+            <th>Comision</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for comision in comisiones %}
+            <tr>
+                <td>{{ comision.producto }}</td>
+                <td>{{ comision.vendedor }}</td>
+                <td>{{ comision.comision*100  }} %</td>
+                <td>
+                    <a href="{{ path('comision_edit', {'id': comision.id}) }}" class="edit">Editar</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+{% block title %}
+Cambio de Comison
+{% endblock %}
+

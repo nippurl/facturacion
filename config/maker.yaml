@@ -1,0 +1,30 @@
+services:
+#    acme.demo.example:
+#        class:     Acme\DemoBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
+#        calls:
+#            - [setService, ["@service_id"]]
+#        tags:
+#            - { name: twig.extension }
+#            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+
+  app.maker.jme_entity:
+      class: App\Maker\Maker\MakeEntity
+      arguments:
+          - '@maker.file_manager'
+          - '@maker.doctrine_helper'
+          - '%kernel.project_dir%'
+          - '@maker.generator'
+          - '@maker.entity_class_generator'
+      calls:
+          - [ configureCommand, [ '@security.command.user_password_encoder', '@?' ] ]
+          - [ interact, [ '@?', '@?', '@security.command.user_password_encoder' ] ]
+      tags:
+          - { name: maker.command }
+
+  app.maker.jme_crud:
+      class: App\Maker\Maker\MakeCrud
+      arguments:
+         - '@maker.doctrine_helper'
+         - '@maker.renderer.form_type_renderer'

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Nuevos Clientes
+{% endblock %}
+
+{% block body %}
+    <h2>Nuevos Clientes</h2>
+<div class="no-print col-12 col-md-6">
+    {{ form(form) }}
+</div>
+    {% if data is not null %}
+        {{ include('contacto/_cuadro_ver.html.twig',{'contactos':data}) }}
+    {% endif %}
+{% endblock %}
+

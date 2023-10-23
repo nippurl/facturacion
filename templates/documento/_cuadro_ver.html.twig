@@ -1,0 +1,33 @@
+{#  Documento[] documentos #}
+<table class="datos">
+    <thead>
+    <tr>
+        <th>Fecha</th>
+        <th>Numero</th>
+        <th>Cliente</th>
+        <th>Productos</th>
+        <th>Forma de Pagos</th>
+        <th>total</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {# doc \App\Entity\Documento #}
+    {% for doc in documentos %}
+        <tr>
+            <td>{{ doc.fecha|date }}</td>
+            <td>
+                <a href="{{ path('documento_ver', {'id':doc.id}) }}">
+                    {{ doc }}
+                </a>
+            </td>
+            <td>{{ doc.contacto }}</td>
+            <td>{{ doc.productos|join(" - ") }}</td>
+            <td>{{ doc.pagos|join("-") }}</td>
+
+            <td>$ {{ doc.total }}</td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>

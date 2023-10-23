@@ -1,0 +1,46 @@
+{# @var voucher \App\Entity\Voucher #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div id="imprimir">
+        <table>
+            <tr>
+                <td width="50%">
+                    <img src="{{ asset(empresa_logo) }}" width="50%" alt="logo"  class="img-thumbnail" align="left">
+                </td>
+                <td width="50%">
+                    <p> Fecha: {{ voucher.compraFecha|date }}</p>
+                    <p>Voucher N: {{ voucher.numero }}</p>
+                    <p>Comanda N:{{ voucher.compraNumero }}</p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    Detalle: {{ voucher.descripcion }}
+                </td>
+            </tr>
+        </table>
+
+
+
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            var ficha = document.getElementById('imprimir');
+            var ventimp = window.open(' ', 'popimpr');
+            ventimp.document.write(ficha.innerHTML);
+            ventimp.document.close();
+            ventimp.print();
+            ventimp.close();
+            close();
+        });
+
+    </script>
+
+{% endblock %}
+
+{% block title %}
+    Impresion del Voucher {{ voucher }}
+{% endblock %}
+

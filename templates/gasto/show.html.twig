@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gasto{% endblock %}
+
+{% block body %}
+    <h1>Gasto</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Fecha</th>
+                <td>{{ gasto.fecha ? gasto.fecha|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Descripcion</th>
+                <td>{{ gasto.descripcion }}</td>
+            </tr>
+            <tr>
+                <th>Importe</th>
+                <td>{{ gasto.importe }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('gasto_index') }}" class="exit">Volver</a>
+    {% if  gasto.createAt|date('ymd')  == 'today'|date('ymd')%}
+        <a href="{{ path('gasto_edit', {'id': gasto.id}) }}" class="edit">Editar</a>
+        {{ include('gasto/_delete_form.html.twig') }}
+    {% endif %}
+    {% endblock %}

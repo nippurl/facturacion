@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contacto index{% endblock %}
+
+{% block body %}
+    <div class="float-right">
+        <a href="{{ path('contacto_new') }}" class="new">Nuevo</a>
+
+    </div>
+
+    <h1> Lista de Contactos</h1>
+{{ include('contacto/_cuadro_ver.html.twig',{'contactos':contactos}) }}
+
+{% endblock %}

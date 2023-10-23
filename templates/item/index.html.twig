@@ -1,0 +1,115 @@
+{{ form_start(form,{'attr':{'id': 'form_items'}} ) }}
+<table class="datos">
+    <thead>
+    <tr>
+        <th>Codigo</th>
+        <th>Descripcion</th>
+        <th>Vendedor</th>
+        <th>Cantidad</th>
+        <th>PrecioU</th>
+        <th>Total</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% set tot= 0 %}
+    {% for item in items %}
+        {% if id != item.id %}
+            <tr>
+                <td>{{ item.codigo }}</td>
+                <td>{{ item.descripcion }}</td>
+                <td>{{ item.vendedor }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>{{ item.precioU }}</td>
+                <td>{{ item.total }}</td>
+                {% set tot= tot + item.total %}
+                <td>
+
+                    <a href="javascript:editar({{ item.id }})" id="edit_{{ item.id }}" class="edit">editar</a>
+                    <a href="javascript:borrar({{ item.id }});" id="delete_{{ item.id }}" class="delete">Borrar</a>
+                </td>
+            </tr>
+        {% endif %}
+
+    {% endfor %}
+
+
+    <tr class="no-print">
+        <td>{{ form_widget(form.producto) }}</td>
+        <td>{{ form_widget(form.descripcion) }}</td>
+        <td>{{ form_widget(form.vendedor) }}</td>
+        <td>{{ form_widget(form.cantidad) }}</td>
+        <td>{{ form_widget(form.precioU) }}</td>
+        <td>{{ form_widget(form.total) }}</td>
+
+
+        <td>
+            <a href="javascript:agregar({{ id }});" class="new">Guardar</a>
+            {{ form_rest(form) }}</td>
+    </tr>
+    </tbody>
+    <tfood>
+        <tr>
+            <th>
+
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>TOTAL</th>
+            <th>
+
+                <input type="number" id="TOTAL" onchange="$('#doc_cab_total').val($('#TOTAL').val());"
+                       value="{{ tot }}"/>
+                <input type="number" id="ant" value="{{ tot }}" style="display: none"/>
+            </th>
+            <th></th>
+        </tr>
+    </tfood>
+</table>
+{{ form_end(form) }}
+
+<script>
+    {% if  tot>0 %}
+    $('input#pago_monto').val({{ doc.saldo }});
+    calcular();
+    {% endif %}
+    finalizar();
+    /*  $(".select2").select2({
+          matcher: function(term, text) {
+              alert(term);
+              var terms = term.split(" ");
+              for (var i=0; i < terms.length; i++){
+                  var tester = new RegExp("\\b" + terms[i], 'i');
+                  if (tester.test(text) == false){
+                      return (text === 'Other')
+                  }
+              }
+              return true;
+          },
+      });
+
+     */
+    $(function() {
+        $('#item_producto').select2({
+            matcher: function (term, text) {
+                if (term.term) {
+               //     console.log(text.text);
+                    var terms = term.term.toUpperCase().split(" ");
+               //     console.log(terms);
+                    for (var i = 0; i < terms.length; i++) {
+                        if (text.text.toUpperCase().indexOf(terms[i]) == -1) {
+                            return false;
+                        }
+                    }
+                }
+                return text;
+            },
+            sortResults: function(results) {
+                if (results.length > 1) results.pop();
+                return results;
+            }
+        });
+    });
+
+</script>

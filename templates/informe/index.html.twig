@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pantalla de Informes{% endblock %}
+
+{% block body %}
+    <h1>Listado de Informes</h1>
+    <h2>Ventas y Comisones</h2>
+    <div class="row">
+        <div class="col-12 col-md-4 text-center">
+            <a href="{{ path('informe_dia') }}">Informe de Venta de dia</a>
+
+        </div>
+        {% if comisiones is defined and comisiones %}
+        <div class="col-12 col-md-4 text-center">
+            <a href="{{ path('informe_comision') }}">Informe de Comisiones Dia a Dia</a>
+
+        </div>
+        <!-- /.col -->
+        <div class="col-12 col-md-4 text-center">
+            <a href="{{ path('informe_comisionExt') }}">Informe de Comisiones por Comanda</a>
+
+        </div>
+        {% endif %}
+    </div>
+    <br/>
+    <br/>
+
+    <h2>Clientes</h2>
+    <div class="row">
+        <div class="col-12 col-md-4 text-center">
+            <a href="{{ path('informe_cumpleanios') }}">Informe de Cumpleaños</a>
+        </div>
+        {% if comisiones is defined and comisiones %}
+        <div class="col-12 col-md-4 text-center">
+            <a href="{{ path('informe_nuevosClientes') }}">Informe de Nuevos Clientes</a>
+
+        </div>
+        {% endif %}
+        <div class="col-12 col-md-4 text-center">
+            <a href="{{ path('informe_deudores') }}">Informe de Deudores</a>
+
+        </div>
+        <!-- /.col-6 -->
+    </div>
+
+    <h2>Productos y Stock</h2>
+    <div class="row">
+        <div class="col-12 col-md-4 text-center">
+            <a href="{{ path('informe_productos') }}">Informe de Productos</a>
+        </div>
+        <div class="col-12 col-md-4 text-center">
+
+        </div>
+        <div class="col-12 col-md-4 text-center">
+
+        </div>
+        <!-- /.col-6 -->
+    </div>
+    <!-- /.row -->
+</div>
+{% endblock %}

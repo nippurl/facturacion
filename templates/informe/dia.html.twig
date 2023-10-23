@@ -1,0 +1,134 @@
+{# @var datos \App\Entity\Documento[] #}
+{# @var efectivo float  El efectivo que hay #}
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <h2>Informe de Venta del Día</h2>
+
+
+    <div class="no-print col-md-6 col-12">
+    {{ form(form) }}
+    </div>
+    <h3>Ingresos</h3>
+    {% if datos is not empty %}
+            <div class=" d-none d-print-block">
+                <h3  > desde: {{ data['desde']|date() }} - hasta: {{ data['hasta']|date() }}
+                    {% if data['cajero'] is not null %}
+                        - Cajero: {{ data['cajero'].nick }}
+                    {% endif %}
+                   </h3>
+            </div>
+        <table class="datos">
+            <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Numero</th>
+                <th>Cliente</th>
+                <th>Productos</th>
+                <th>Forma de Pagos</th>
+                <th>total</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {# doc \App\Entity\Documento #}
+            {% for doc in datos %}
+                <tr>
+                    <td>{{ doc.fecha|date }}</td>
+                    <td>
+                        <a href="{{ path('documento_ver', {'id':doc.id}) }}">
+                            {{ doc }}
+                        </a>
+                    </td>
+                    <td>{{ doc.contacto }}</td>
+                    <td>{{ doc.productos|join(" - ") }}</td>
+                    <td>{{ doc.pagos|join("-") }}</td>
+
+                    <td>$ {{ doc.total }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+        <!-- /.datos -->
+
+        <table class="datos">
+            <thead>
+            <tr>
+                <th>Forma de Pago</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% set sumas =0 %}
+            {% for xx in pagos %}
+                {% if  xx['tot']> 0 %}
+                    {# xx['item'] PagoFormaTipo #}
+
+                    <tr>
+                        <th>{{ xx['item'].nombre }}</th>
+                        <td>{{ xx['tot']|round(2) }}</td>
+                    </tr>
+                    {% if xx['item'].sumatoria ==1 %}
+                        {% set sumas = sumas + xx['tot'] %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>TOTAL en Ingresos</th>
+            <td class="bond">{{ sumas | round(2) }}</td>
+            <!-- /.bond -->
+            </tr>
+            </tfoot>
+        </table>
+        <!-- /.datos -->
+        <h3>Egresos o Gastos</h3>
+        <table class="datos">
+            <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Rubro</th>
+                <th>Descripcion</th>
+                <th>Importe</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% set totg = 0 %}
+            {# gasto \App\Entity\Gasto #}
+            {% for gasto in gastos %}
+            <tr>
+                <td>{{ gasto.fecha | date }}</td>
+                <td>{{ gasto.gastoTipo }}</td>
+                <td>{{ gasto.descripcion }}</td>
+                <td>{{ gasto.importe }}</td>
+                {%  set totg = totg + gasto.importe %}
+            </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th>TOTAL</th>
+                <th>{{ totg|round(2) }}</th>
+            </tr>
+            </tfoot>
+        </table>
+        <!-- /.datos -->
+        {% set idEfectivo = constant('App\\Entity\\PagoFormaTipo::EFECTIVO'  ) %}
+      {% set efectivo = pagos[idEfectivo]['tot'] %}
+
+            <p> Efectivo - Gasto = {{ efectivo - totg }} </p>
+
+        {% endif %}
+
+
+{% endblock %}
+
+{% block title %}
+    Informe del venta del Dia
+{% endblock %}
+

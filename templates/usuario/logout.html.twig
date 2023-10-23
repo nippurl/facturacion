@@ -1,0 +1,40 @@
+<html>
+<br/>
+<br/>
+<div style="text-align: center">
+    <h2>Acabo de cerrar su sesion.</h2>
+    <h1>Hasta Luego, Gracias</h1>
+    <h3>Ingresara en 5 Seg, sino <a href="{{ path('index_index', {  }) }}">click aqui</a></h3>
+</div>
+
+<script>
+    //setTimeout("location.href='{{ path('index_index') }}'",5000)
+</script>
+<script type="text/javascript">
+    function logout() {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            xmlhttp = new XMLHttpRequest();
+        }
+        // code for IE
+        else if (window.ActiveXObject) {
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        if (window.ActiveXObject) {
+            // IE clear HTTP Authentication
+            document.execCommand("ClearAuthenticationCache");
+            window.location.href='{{ path('index_index') }}';
+        } else {
+            xmlhttp.open("GET", '{{ path('easyadmin') }}', true, "logout", "logout");
+            xmlhttp.send("");
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4) {window.location.href='{{ path('index_index') }}';}
+            }
+        }
+
+        return false;
+    }
+    logout();
+</script>
+</html>
+

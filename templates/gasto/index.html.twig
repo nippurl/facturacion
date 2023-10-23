@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gasto index{% endblock %}
+
+{% block body %}
+<h1>Filtrar el Listado</h1>
+    <div class="col-md-6 col-12">
+        {{ form(form) }}
+
+    </div>
+
+
+    <a href="{{ path('gasto_new') }}" class="new float-lg-right">Nuevo Gasto</a>
+    <h1>Lista de Gastos</h1>
+
+    <table class="datos">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Descripcion</th>
+                <th>Importe</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for gasto in gastos %}
+            <tr>
+                <td>{{ gasto.fecha ? gasto.fecha|date() : '' }}</td>
+                <td>{{ gasto.descripcion }}</td>
+                <td>$ {{ gasto.importe |round(2) }}</td>
+                <td>
+                    <a href="{{ path('gasto_show', {'id': gasto.id}) }}" class="show">Ver</a>
+                    {% if  gasto.fecha|date('ymd')  == 'today'|date('ymd') or is_granted('ROLE_SYS')%}
+                    <a href="{{ path('gasto_edit', {'id': gasto.id}) }}" class="edit">Editar</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">No Hay gastos</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

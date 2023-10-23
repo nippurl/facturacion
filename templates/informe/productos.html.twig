@@ -1,0 +1,41 @@
+{# @var datos App\Entity\Productos[] #}
+{# @var form FormQuery #}
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Stock
+{% endblock %}
+
+{% block body %}
+    <h2>Flitros</h2>
+{{ form(form) }}
+    {% if datos is not null %}
+        <table class="datos">
+            <thead>
+            <tr>
+                <th>Cod</th>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Anterior</th>
+                <th>Consumo</th>
+                <th>Actual</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for prod in datos %}
+                {# @var prod \App\Entity\Producto #}
+                <tr>
+                    <td>{{ prod.codBarra }}</td>
+                    <td>{{ prod.nombre }}</td>
+                    <td>{{ prod.tipo }}</td>
+                    <td>{{ prod.stockFecha(desde) }}</td>
+                    <td>{{ prod.consumo(desde) }}</td>
+                    <td>{{ prod.stockTotal }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    {% endif %}
+{% endblock %}
+

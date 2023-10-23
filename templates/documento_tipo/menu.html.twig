@@ -1,0 +1,4 @@
+{# dtipo \App\Entity\DocumentoTipo[] #}
+{% for tipo in dtipo %}
+        <a href="{{ path('documento_nuevo', { 'tipo':tipo.id }) }}" class="dropdown-item"> {{ tipo.nombre }}</a>
+{% endfor %}

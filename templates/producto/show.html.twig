@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Producto{% endblock %}
+
+{% block body %}
+    <h1>Producto</h1>
+
+    <table class="table">
+        <tbody>
+
+        <tr>
+            <th>Tipo de Producto</th>
+            <td>{{ producto.tipo }}
+            <div class="hidden-mc">
+                ( {{ producto.tipo.padres| join(', ')}} )
+            </div>
+
+
+            </td>
+        </tr>
+
+        <tr>
+            <th>Nombre</th>
+            <td>{{ producto.nombre }}</td>
+        </tr>
+        <tr>
+            <th>Descripcion</th>
+            <td>{{ producto.descripcion }}</td>
+        </tr>
+        <tr>
+            <th>CodBarra</th>
+            <td>{{ producto.codBarra }}</td>
+        </tr>
+        <tr>
+            <th>Precio</th>
+            <td>{{ producto.precio }}</td>
+        </tr>
+        <tr>
+            <th>Primer Deposito</th>
+            <td>{{ producto.stock1 }}</td>
+        </tr>
+        <tr>
+            <th>Fraccion</th>
+            <td>{{ producto.fraccion }}</td>
+        </tr>
+        {% if producto.tipoStock %}
+
+        <tr>
+            <th>Cantdad</th>
+            <td>
+                <table class="datos">
+                    <thead>
+                    <tr>
+                        <th>Deposito</th>
+                        <th>Cantidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for stock in producto.stock %}
+                        <tr>
+                            <td>{{ stock.deposito }}</td>
+                            <td>{{ stock.cantidad }}</td>
+                            <td>
+                                {%  if is_granted('ROLE_ADM') %}
+                                <a href="{{ path("stock_edit",{'id':stock.id}) }}" class="edit">Editar</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+
+                </table>
+                <!-- /.datos -->
+
+
+            </td>
+        </tr>
+        {% endif %}
+
+        </tbody>
+    </table>
+
+    <a href="{{ path('producto_index') }}">Volver a la lista</a>
+
+    <a href="{{ path('producto_edit', {'id': producto.id}) }}">Editar</a>
+
+    {% if is_granted('ROLE_SYS') %}
+        <a href="{{ path('comision_index',{'producto':producto.nombre}) }}">Editar Comisiones</a>
+    {% endif %}
+
+    {{ include('producto/_delete_form.html.twig') }}
+{% endblock %}

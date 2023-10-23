@@ -1,0 +1,111 @@
+{{ form_start(form ,{'attr':{'id': 'pago'}} ) }}
+<table class="datos">
+    <thead>
+    <tr>
+        <th>Forma de Pg.</th>
+        <th>Monto</th>
+        <th>Cuotas</th>
+        <th>Interes</th>
+        <th>MontoCuota</th>
+        <th>MontoTotal</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr class="no-print">
+        <td>{{ form_widget(form.forma) }}</td>
+        <td>{{ form_widget(form.monto) }}</td>
+        <td>{{ form_widget(form.cuotas) }}
+            <div id="cuotas"></div>
+        </td>
+        <td>{{ form_widget(form.interes) }}
+            <div id="interes"></div>
+        </td>
+        <td>{{ form_widget(form.montoCuota) }}
+            <div id="montoCuota"></div>
+        </td>
+        <td>{{ form_widget(form.montoTotal) }}
+            <div id="montoTotal"></div>
+        </td>
+        <td>
+            <a href="javascript: pagoEditar({{ id }})" class="new">Guardar</a>
+        </td>
+    </tr>
+    {% for pago in pagos %}
+        {% if id != pago.id %}
+
+
+            <tr>
+                <td>{{ pago.forma }}</td>
+                <td>{{ pago.monto }}</td>
+                <td>{{ pago.cuotas }} </td>
+                <td>{{ pago.interesStr }} % </td>
+                <td>{{ pago.montoCuota }}</td>
+                <td>{{ pago.montoTotal }}</td>
+                <td>
+                    <a href="javascript: pagoEditar({{ pago.id }})" class="edit">Editar</a>
+                    <a href="javascript: pagoBorrar({{ pago.id }})" class="delete">Borrar</a>
+                </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+{{ form_rest(form) }}
+   {{ form_end(form) }}
+<input type="hidden" id="pagado" value="{{ doc.pagado }}"/>
+<script>
+
+    function pagoEditar(id) {
+        var url = "{{ path('pago_edit', { 'doc': doc.id }) }}?id=" + id;
+        var data = $("form#{{ form.vars.id }}").serialize();
+        $("#pagos").load(url, data);
+
+    }
+
+    function pagoBorrar(id) {
+        var url = "{{ path('pago_delete') }}?id=" + id;
+        $("#pagos").load(url);
+
+    }
+
+
+    function PagoCalcular() {
+        // alert('Calculando');
+        var pfid = $('#pago_forma').val();
+        var url = "{{ path('pago_forma') }}?id=" + pfid;
+        $.getJSON({
+            url: url,
+            success: function (data) {
+                //  alert("PRod: " + data);
+                $("#pago_interes").val(data['interes']);
+                $("#pago_cuotas").val(data['cuotas']);
+                // $("#item_codigo").val(prodid);
+                var monto = $('#pago_monto').val();
+                if (monto.indexOf("%")>-1){
+                    monto = monto.replace("%", "");
+                    monto  = monto.trim();
+                    monto = monto * saldo() /100;
+                    $('#pago_monto').val(monto);
+                }
+
+                var interes = data['interes'];
+                $('div#interes').html(Math.round((interes - 1) * 100) + " % ");
+                var cuotas = data['cuotas'];
+                $('div#cuotas').html(cuotas);
+                var montoTotal = Math.round(interes * monto * 100) / 100;
+                $('div#montoTotal').html(montoTotal);
+                $('input#pago_montoTotal').val(montoTotal);
+                var montoCuotas = Math.round(montoTotal / cuotas * 100) / 100;
+                $('div#montoCuota').html(montoCuotas);
+                $('input#pago_montoCuota').val(montoCuotas);
+                console.log(montoCuotas);
+
+            }
+
+        });
+
+    }
+    finalizar();
+</script>

@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Comision index{% endblock %}
+
+{% block body %}
+    <h2>Lista de Comiones</h2>
+    <div class="col-md-6 col-12 no-print">
+        {{ form(form) }}
+    </div>
+    <label for="todos">CAMBIA EL VALOR A TODOS</label>
+    <input type="nomber" name="todos" id="todos"/>
+    <input type="button" onclick="javascript:todos()" name="todos" value="Cambiar" class="edit">
+    <script type="text/javascript">
+        function todos() {
+            var valor = document.getElementById("todos").value;
+            console.log("TODOS: " + valor);
+            /* var x = document.getElementsByName("com");
+             for (i=0;i<x.length;i++){
+                 x[i].valueOf = valor;
+             }*/
+            $(".com").val(valor);
+        }
+    </script>
+    <form action="{{ path('comision_guardar') }}" method="post">
+        <input type="hidden" name="proId" value="{{ data['prodId']?data['prodId'] }}">
+        <input type="hidden" name="venId" value="{{ data['venId']?data['venId'] }}">
+        {% if MaxPage >1 %}
+            {{ include('comision/_pages.html.twig', { 'page':page, 'MaxPage':MaxPage, 'data': data, 'dir': 'comision_index'}) }}
+
+        {% endif %}
+
+        Cantidad: {{ cant }}
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Vendedor</th>
+                <th>Comision</th>
+                <th>Nuevo Valor</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for comision in comisions %}
+                {# @var comision \App\Entity\Comision #}
+                <tr>
+                    <td>{{ comision.producto }}</td>
+                    <td>{{ comision.vendedor }}</td>
+                    <td>{{ comision.comision*100 }} %</td>
+                    <td>
+                        <input type="number" value="{{ comision.comision*100 }}"
+                               name="com[{{ comision.producto.id }}_{{ comision.vendedor.id }}]" class="com">
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <input type="submit" class="edit" value="Guardar">
+    </form>
+{% endblock %}

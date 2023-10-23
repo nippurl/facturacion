@@ -1,0 +1,32 @@
+{#
+{% if data['prodId'] is not null %}
+    {% set xx['prodId'] = (data['prodId']).id %}
+{% endif %}
+{% if data['venId'] is not null %}
+    {% set xx['venId'] = data['venId'].id %}
+{% endif %}
+#}
+{% set xx = data %}
+<p  class="float-rigth">pagina {{ page }} de {{ MaxPage }}</p>
+<p>
+{% if MaxPage > 1 %}
+    {% if page != 1 %}
+        {%  set xx = xx  |merge({'page': page-1 } ) %}
+
+        <a href="{{ path(dir, xx ) }}"> < </a>
+    {% endif %}
+    {% for i  in 1 .. MaxPage  %}
+        {% if i != page %}
+            {%  set xx = xx|merge({'page': i } ) %}
+
+              <a href="{{ path(dir, xx ) }}"> {{ i }} </a>
+            {% else %}
+            {{ i }}
+        {% endif %}
+
+    {% endfor %}
+    {% if page != MaxPage %}
+        <a href="{{ path(dir, xx|merge({'page': page+1}) ) }}"> > </a>
+    {% endif %}
+{% endif %}
+ </p>

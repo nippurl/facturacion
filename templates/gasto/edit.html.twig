@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Gasto{% endblock %}
+
+{% block body %}
+    <h1>Edit Gasto</h1>
+
+    {{ include('gasto/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('gasto_index') }}">Volver a la Lista</a>
+
+    {{ include('gasto/_delete_form.html.twig') }}
+{% endblock %}

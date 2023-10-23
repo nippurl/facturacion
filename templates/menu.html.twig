@@ -1,0 +1,98 @@
+<nav class="no-print">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('index_index') }}">
+                    {% if empresa_logo != "" %}
+                        <img src="{{ asset(empresa_logo) }}" height="40"/>
+                    {% else %}
+                        <strong>{{ empresa_nombre }} </strong>
+                    {% endif %}
+
+
+                </a></li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-expanded="false">
+                    Comporbantes
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% if app.request.server.get('caja_inicial') is defined and app.request.server.get('caja_inicial') %}
+                        <a href="{{ path('documento_caja_inicial') }}" class="dropdown-item"> Inicio de Caja </a>
+                        <div class="dropdown-divider"></div>
+                    {% endif %}
+
+                    {{ render(controller('App\\Controller\\DocumentoTipoController:menu')) }}
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ path('informe_dia') }}" class="dropdown-item"> Caja del Dia</a>
+                </div>
+            </li>
+
+
+            <li class="nav-item"><a class="nav-link" href="{{ path('producto_index') }}">Productos </a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ path('contacto_index') }}">Contactos</a></li>
+
+            {% if voucher is defined and voucher %}
+                <li class="nav-item"><a class="nav-link" href="{{ path('voucher_index') }}">Vouchers </a></li>
+            {% endif %}
+            {% if agenda is defined and agenda %}
+                <li class="nav-item"><a class="nav-link" href="{{ path('agenda_index') }}">Agenda </a></li>
+            {% endif %}
+            <li class="nav-item"><a class="nav-link" href="{{ path('gasto_index') }}">Gastos </a></li>
+            {% if is_granted("ROLE_ADM") %}
+
+                <li class="nav-item"><a class="nav-link" href="{{ path('informe_index') }}">Informes </a></li>
+            {% endif %}
+            {% if app.request.server.get('adminsitrativa') is defined and app.request.server.get('adminsitrativa') %}
+                {% if is_granted("ROLE_SYS") %}
+                    <li class="nav-item"><a class="nav-link" href="{{ path('administracion_index') }}">Administración </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+            {% if is_granted('ROLE_SYS') %}
+                <li><a class="nav-link" href="{{ path('admin') }}">Sistemas</a></li>
+            {% endif %}
+
+
+            {#
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#">Disabled</a>
+            </li> #}
+
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item">
+                <form action="{{ path('index_buscar') }}" target="_blank">
+                    <input type="text" name="q">
+                    <input type="submit" class="success" value="Buscar">
+                </form>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+
+
+            <li class="nav-item" style="color: white">
+                <a class="nav-link" href="{{ path('usuario_logout', {  }) }}">
+                    Salir
+                </a>
+
+            </li>
+<li>{{ app.user }}</li>
+
+            <!-- /.nav-item -->
+            {# <form class="form-inline my-2 my-lg-0" action="{{ path('contacto_buscar') }}">
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar Contacto" aria-label="Buscar"
+                       name="q">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+            </form>
+            #}
+        </ul>
+
+    </div>
+</nav>

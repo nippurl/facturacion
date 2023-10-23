@@ -1,0 +1,250 @@
+easy_admin:
+    design:
+        menu:
+            - entity: Usuario
+            - entity: UsuarioNivel
+              label: Nivel de Usuario
+            - entity: DocumentoTipo
+              label: Tipo de Docuemtnos
+            - entity: ProductoTipo
+              label: Tipos de Productos
+            - entity: PagoFormaTipo
+              label: Formas de Pago
+            - entity: VoucherTipo
+              label: Tipo de Voucher
+            - entity: Deposito
+              label: Depositos
+            - entity: GastoTipo
+              label: Tipos de Gastos
+      #      - entity: Orden       #No necesario ya esta en Agenda Area
+      #        label: Orden Agenda
+            - entity: AgendaArea
+              label: Areas de la Agenda
+            - entity: Menu
+              label: Menu en la pantalla principal
+
+                  #      - entity: PagoForma
+      #        labol: Cuotas por Formas P.
+            - label: Salir
+              route: index_index
+    entities:
+#        # List the entity class name you want to manage
+        Usuario:
+            class: App\Entity\Usuario
+            list:
+                fields:
+                    - nick
+                    - nombre
+                    - nivel
+                    - dni
+                    - direccion
+                    - telefono
+                    - property: visible
+                      type: toggle
+            form:
+                fields:
+                    - nick
+                    - nombre
+                    - property: password
+                      type: repeated
+                      type_options:
+                  #        type: 'password'
+                          invalid_message: 'Las dos contraseñas deben coincidir'
+                          first_options:
+                              label: 'Contraseña'
+                          second_options:
+                              label: 'Confirmar Contraseña'
+                          required: false
+                    - nivel
+                    - dni
+                    - direccion
+                    - telefono
+        UsuarioNivel:
+            class: App\Entity\UsuarioNivel
+            form:
+                fields:
+                    - nombre
+                    - codigo
+                    - negro
+
+
+        DocumentoTipo:
+            class: App\Entity\DocumentoTipo
+            list:
+                fields:
+                    -
+                      property: nombre
+                      label: Nombre
+                    - letra
+                    - ultimo
+                    - menu
+                    - stock
+                    - caja
+                    - pagos
+                    - voucher
+                    - property: menu_imagen
+                      label: imagen
+                      type: image
+                      base_path: '/img/'
+            form:
+                fields:
+                    - nombre
+                    - letra
+                    - ultimo
+                    - menu
+                    - stock
+                    - caja
+                    - pagos
+                    - blanco
+                    - property: voucher
+                     # type:
+                    - AD_orden
+                    - deposito
+                    - property: 'menuImagenFile'
+                      type: 'file'
+                      required: false
+                     # type_options:
+                      upload: '/public/img/'
+                      upload_filename: '[uuid]-[timestamp].[extension]'
+
+
+        ProductoTipo:
+            class: App\Entity\ProductoTipo
+            list:
+                fields:
+                    - nombre
+             #       - padre
+                    - hijos
+            form:
+                fields:
+                    - nombre
+                    - padre
+
+        PagoFormaTipo:
+            class: App\Entity\PagoFormaTipo
+            list:
+                fields:
+                    - 'nombre'
+                    - 'cuotas'
+                    - property: deuda
+                      type: 'toggle'
+                    - property: 'sumatoria'
+                      type: 'toggle'
+            form:
+                fields:
+                    - 'nombre'
+                    - deuda
+                    -
+                        property: 'cuotas'
+                        type: 'collection'
+                        by_reference: false
+                        type_options:
+                            entry_type: 'App\Form\PagoFormaInteresType'
+                         #   prototype: true
+                            by_reference: false
+        VoucherTipo:
+            class: App\Entity\VoucherTipo
+            list:
+                fields:
+                    - nombre
+                    -
+                      property: cant
+                      label: cantidad
+            form:
+                fields:
+                    - nombre
+                    -
+                      property: cant
+                      label: cantidad
+
+        Deposito:
+            class: App\Entity\Deposito
+            list:
+                fields:
+                    - nombre
+                    - direccion
+                    - telefono
+                    - orden
+            form:
+                fields:
+                    - nombre
+                    - direccion
+                    - telefono
+                    - orden
+
+
+
+        GastoTipo:
+            class: App\Entity\GastoTipo
+            list:
+                fields:
+                    - nombre
+            form:
+                fields:
+                    - nombre
+        Orden:
+            class: App\Entity\Orden
+            list:
+                fields:
+                    - responsable
+                    - {property: 'orden', format: '%.0f'}
+                sort: ['orden', 'ASC']
+            form:
+                fields:
+                    - responsable
+                    - orden
+        AgendaArea:
+            class: App\Entity\AgendaArea
+            list:
+                fields:
+                    - nombre
+                    #- orden
+                    - usuarios
+            form:
+                fields:
+                    - nombre
+               #    - orden
+                    - property: 'usuarios'
+                      type: 'collection'
+                      by_reference: false
+                      type_options:
+                          entry_type: 'App\Form\OrdenType'
+                        #   prototype: true
+                          by_reference: false
+
+        Menu:
+            class: App\Entity\Menu
+            list:
+                fields:
+                    - orden
+                    - nombre
+                    - url
+                    - property: imagen
+                      label: imagen
+                      type: image
+                      base_path: '/img/'
+            form:
+                fields:
+                    - orden
+                    - nombre
+                    - url
+                    - property: 'ImagenFile'
+                      type: 'file'
+                      required: false
+                      # type_options:
+                      upload: '/public/img/'
+                      upload_filename: '[uuid]-[timestamp].[extension]'
+
+     #   PagoForma:
+     #       class: App\Entity\PagoForma
+     #       list:
+     #           fields:
+     #               - 'pagoForma'
+     #               - 'cuotas'
+     #               - 'interes'
+     #       form:
+    #           fields:
+    #               - 'pagoForma'
+    #               - 'cuotas'
+     #               - 'interes'
+

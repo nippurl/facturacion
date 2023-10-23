@@ -1,0 +1,24 @@
+<table class="datos" >
+    <thead>
+    <tr>
+        <th>Forma de Pg.</th>
+        <th>Monto</th>
+        <th>Cuotas</th>
+        <th>Interes</th>
+        <th>MontoCuota</th>
+        <th>MontoTotal</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for pago in pagos %}
+            <tr>
+                <td>{{ pago.forma }}</td>
+                <td>{{ pago.monto }}</td>
+                <td>{{ pago.cuotas }} </td>
+                <td>{{ pago.interesStr }} % </td>
+                <td>{{ pago.montoCuota }}</td>
+                <td>{{ pago.montoTotal }}</td>
+            </tr>
+    {% endfor %}
+    </tbody>
+</table>

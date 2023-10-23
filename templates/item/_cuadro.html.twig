@@ -1,0 +1,25 @@
+<table class="datos">
+    <thead>
+    <tr>
+        <th>Codigo</th>
+        <th>Descripcion</th>
+        <th>Vendedor </th>
+        <th>Cantidad</th>
+        <th>PrecioU</th>
+        <th>Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in items %}
+            <tr>
+                <td>{{ item.codigo }}</td>
+                <td>{{ item.descripcion }}</td>
+                <td>{{ item.vendedor }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>{{ item.precioU }}</td>
+                <td>{{ item.total }}</td>
+            </tr>
+      
+    {% endfor %}
+    </tbody>
+</table>

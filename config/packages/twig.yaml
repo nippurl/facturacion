@@ -1,0 +1,29 @@
+twig:
+    paths: ['%kernel.project_dir%/templates']
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    form_themes:
+        - 'bootstrap_4_layout.html.twig'
+       # - bootstrap_3_horizontal_layout.html.twig
+    date:
+        format: "d-m-y"
+        #detailed_format: "d-m-Y H:i:s"
+        timezone: "America/Argentina/Tucuman"
+    #money:
+    #    currency: 'ARS'
+    number_format:
+        decimals: 2
+        decimal_point: ','
+        thousands_separator: '.'
+
+
+    globals:
+        nombre_empresa: '%env(nombre_empresa)%'
+        empresa_nombre: '%env(nombre_empresa)%'
+        empresa_cuil: "%env(empresa_cuil)%"
+        empresa_logo:   "%env(empresa_logo)%"
+        voucher: '%env(voucher)%'
+        agenda:  '%env(agenda)%'
+        comisiones: '%env(comisiones)%'
+        caja_inicial: '%env(caja_inicial)%'
+        #'%env(empresa_cuil)%'

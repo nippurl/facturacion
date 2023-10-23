@@ -1,0 +1,30 @@
+<div id="cabecera" class="borde">
+    <h1 class="text-center center-div "> {{ doc.tipo.letra }}</h1>
+    <div class="row">
+        <div class="col col-print-6">
+            <p>Empresa: <b style="font-size: 200%"> {{ nombre_empresa }}</b> </p>
+            <p>CUIT:<b style="font-size: 150%"> {{ empresa_cuil }}</b></p>
+{%  if empresa_domicilio is defined %}
+            <p>Domicilio: {{ empresa_domicilio }} </p>
+ {% endif %}
+            <p>Condicion: Responsable Inscipto</p>
+        </div>
+        <div class="col col-print-6 col-offset-6">
+            <p> Punto de Venta: 0001 Numero: <b> {{ doc.numero }} </b> </p>
+            <p> Fecha: {{ doc.fecha|date }}</p>
+
+            <p>Ing. Brutos: {{ empresa_cuil }}</p>
+
+        </div>
+        <!-- /.col -->
+    </div>
+
+    <div id="Contacto" class="row borde">
+        {{ include ('contacto/datosDoc.hrml.twig',{'contacto':doc.contacto}) }}
+    </div>
+    {% if doc.estado == constant('Cancelado',doc) %}
+        <div class="col-12 " style="color: white; background:#ff363a">
+            ANULADA
+        </div>
+    {% endif %}
+</div>

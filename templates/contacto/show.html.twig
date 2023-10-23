@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contacto{% endblock %}
+
+{% block body %}
+    <h1>Contacto</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Razon Social</th>
+                <td>{{ contacto.razon }}</td>
+            </tr>
+            <tr>
+                <th>Dirección</th>
+                <td>{{ contacto.direccion }}</td>
+            </tr>
+            <tr>
+                <th>Telefono</th>
+                <td>{{ contacto.telefono }}</td>
+            </tr>
+            <tr>
+                <th>Fecha Nac</th>
+                <td>{{ contacto.fechaNac?  contacto.fechaNac|date: ""}}</td>
+            </tr>
+            <tr>
+                <th>Fecha de Creacion</th>
+                <td>{{ contacto.createAt|date}}</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+
+    <a href="{{ path('contacto_index') }}" class="exit">Volver</a>
+
+    <a href="{{ path('contacto_edit', {'id': contacto.id}) }}" class="edit">Editar</a>
+
+    <h2>Documentos</h2>
+    {{ include('documento/_cuadro_ver.html.twig', {'documentos': contacto.docuemntos}) }}
+{% endblock %}

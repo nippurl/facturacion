@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Comision{% endblock %}
+
+{% block body %}
+    <h1>Comision</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ comision.id }}</td>
+            </tr>
+            <tr>
+                <th>Comision</th>
+                <td>{{ comision.comision }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('comision_index') }}" class="exit">{{ 'action.exit'|trans }}</a>
+
+    <a href="{{ path('comision_edit', {'id': comision.id}) }}" class="edit"> {{ 'action.edit'|trans }}</a>
+
+{% endblock %}

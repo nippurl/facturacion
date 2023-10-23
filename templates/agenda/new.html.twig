@@ -1,0 +1,13 @@
+{#  @var Agenda App\Entity\Agenda #}
+{# @var form \App\Form\AgendaType #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Nuevo Agenda{% endblock %}
+
+{% block body %}
+    <h1>Nuevo Agenda</h1>
+
+    {{ include('agenda/_form.html.twig') }}
+
+    <a href="{{ path('agenda_index') }}" class="exit">Volver</a>
+{% endblock %}

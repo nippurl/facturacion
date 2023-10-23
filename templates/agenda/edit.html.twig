@@ -1,0 +1,16 @@
+{# @var form \App\Form\AgendaType #}
+{#  @var Agenda App\Entity\Agenda #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Agenda{% endblock %}
+
+{% block body %}
+    <h1>Edit Agenda</h1>
+
+    {{ include('agenda/_form.html.twig', {'button_label': 'Guardar'}) }}
+
+    <a href="{{ path('agenda_index') }}" class="exit">Volver</a>
+
+    {{ include('agenda/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,68 @@
+{# @var resultados \App\Entity\Documento[] #}
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Lista de deudores
+{% endblock %}
+
+{% block body %}
+    <h2>Lista de Deudores </h2>
+    <div class="col-md-6 col-12">
+        {{ form(form) }}
+    </div>
+    {% if resultados is not empty %}
+        <h2>Listado desde {{ data['desde']|date }}</h2>
+        <table class="datos">
+            <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Numero</th>
+                <th>Cliente</th>
+                <th>TOTAL</th>
+                <th>Pagado</th>
+                <th>Deuda</th>
+                <th>Porc</th>
+            </tr>
+            </thead>
+            <tbody>
+{% set tot = 0 %}
+{% set deuda = 0 %}
+            {% for res in resultados %}
+                {# @var res \App\Entity\Documento #}
+                <tr>
+                    <td>{{ res.fecha|date }}</td>
+                    <td>
+                        <a href="{{ path('documento_ver',{'id':res.id}) }}">
+                            {{ res.numero }}
+                        </a>
+                    </td>
+                    <td>{{ res.contacto }}</td>
+                    <td>{{ res.total }}</td>
+                    <td>{{ res.pagado }}</td>
+                    <td>{{ res.deuda }}</td>
+                    {% set tot = tot + res.total %}
+                    {% set deuda = deuda + res.deuda %}
+                    <td>
+                        {% if res.total %}
+                            {{ (res.deuda/res.total*100)|round(2) }} %
+                        {% else %}
+                            -- %
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+            <tfood>
+                <tr>
+                    <th colspan="2"></th>
+                    <th>Total</th>
+                    <th>{{ tot }}</th>
+                    <th></th>
+                    <th>{{ deuda }}</th>
+                </tr>
+            </tfood>
+        </table>
+    {% endif %}
+{% endblock %}
+

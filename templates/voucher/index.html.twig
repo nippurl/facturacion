@@ -1,0 +1,61 @@
+{# @var vouchers App\Entity\Voucher[] #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Lista de Vouchers{% endblock %}
+
+{% block body %}
+
+    <form action="#" class="float-lg-right">
+        <input name="q">
+        <input type="submit" class="btn btn-success" value="Filtrar">
+    </form>
+    <a href="{{ path('voucher_new') }}" class="float-lg-right new ">Nuevo Voucher</a>
+    <h1>Lista de Vouchers y Chequeras</h1>
+    <table class="datos">
+        <thead>
+            <tr>
+                <th>Numero</th>
+                <th>Fecha Compra</th>
+                <th>Comanda N</th>
+                <th>Fecha de Ult. Canje</th>
+
+                <th>Cantidad</th>
+
+                <th>Detalle</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for voucher in vouchers %}
+            {# @var voucher App\Entity\Voucher #}
+            <tr>
+
+                <td><a href="{{ path('voucher_show', {'id': voucher.id}) }}">{{ voucher.numero }}</a></td>
+                <td>{{ voucher.compraFecha ? voucher.compraFecha|date() : '' }}</td>
+                <td>{{ voucher.compraNumero }}</td>
+                <td>{{ voucher.canjeFecha ? voucher.canjeFecha|date() : '' }}</td>
+                <td>{{ voucher.canjes|length}} de {{ voucher.voucherTipo.cant }}</td>
+                <td>{{ voucher.descripcion }}</td>
+                <td>
+                    {% if voucher.compraFecha|date('%Y-%m-%d') == 'today'|date('%Y-%m-%d') or is_granted('ROLE_SYS') %}
+                    <a href="{{ path('voucher_edit', {'id': voucher.id}) }}" class="edit">Editar</a>
+                    {% endif %}
+
+                    {% if voucher.impresoAt is null or is_granted('ROLE_SYS')   %}
+                        <a href="{{ path('voucher_imprimir',{'id':voucher.id}) }}" class="btn btn-success" target="_blank"> Imprimir </a>
+                    {% endif %}
+                    {% if  voucher.canjes|length  < voucher.voucherTipo.cant %}
+                        <a href="{{ path('voucher_canjear', {'id': voucher.id}) }}" class="btn btn-secondary">Canjear</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">No hay registro</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Comision{% endblock %}
+
+{% block body %}
+    <h1>Edit Comision</h1>
+
+    {{ include('comision/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('comision_index') }}" class="exit">{{ 'action.exit'|trans }}</a>
+
+{% endblock %}

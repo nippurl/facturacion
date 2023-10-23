@@ -1,0 +1,19 @@
+{# @var doc \App\Entity\Documento #}
+<table style="width: 100%;border-style: solid;">
+    <tr>
+        <td>
+            <img src="{{ app.request.uriForPath('/'~empresa_logo ) }}" width="40%" alt="logo"  class="img-thumbnail" >
+        </td>
+        <td>
+            <p>Empresa: <b style="font-size: 200%"> {{ nombre_empresa }}</b> </p>
+            <p>CUIT:<b style="font-size: 150%"> {{ empresa_cuil }}</b></p>
+            {%  if empresa_domicilio is defined %}
+                <p>Domicilio: {{ empresa_domicilio }} </p>
+            {% endif %}
+            <p>Condicion: Responsable Inscipto</p>
+            <p> Punto de Venta: 0001 Numero: <b> {{ doc.numero }} </b> </p>
+            <p> Fecha: {{ doc.fecha|date }}</p>
+            <p>Ing. Brutos: {{ empresa_cuil }}</p>
+        </td>
+    </tr>
+</table>

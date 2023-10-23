@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Informe de Comisiones
+{% endblock %}
+
+{% block body %}
+<h2> Informe de Comisiones Extendido </h2>
+<div class="no-print col-12 col-md-6">
+    {{ form(form) }}
+</div>
+    {% if resultado is not empty %}
+        <table class="datos">
+            <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Documento</th>
+                <!--th>Cliente</th-->
+                <th>Vendedor</th>
+                <th>Producto</th>
+                <th>Valor Venta</th>
+                <th>forma de Pago</th>
+                <th>%</th>
+                <th>Comision</th>
+
+            </tr>
+            </thead>
+            {# xx[0] Documento #}
+            {% set totCom = 0 %}
+            {% set tot =0 %}
+            <tbody>
+            {# doc \App\Entity\Documento #}
+                {% for xx in resultado %}
+                    {# % set doc = xx[0] %#}
+
+                    <tr>
+                        <td>{{ xx.fecha|date }}</td>
+                        <td>
+                            <a href="{{ path('documento_ver', {'id':xx.d_id}) }}">
+                            {{ xx['letra'] }}-{{ xx.numero }}
+                            </a>
+                        </td>
+                        <!--td>{ { xx['cli'] }}</td-->
+                        <td>{{ xx['ven'] }}</td>
+                        <td>{{ xx['desc'] }}</td>
+                        <td>{{ xx['total'] }}</td>
+                        <th>{{ xx['pagos'] }}</th>
+                        <td>{{ xx['com']*100|round }}%</td>
+                        
+                        <td>{{ xx['suma']|round(2) }}</td>
+                    </tr>
+                    {% set totCom = totCom+ xx['total'] %}
+
+                    {% set tot = tot+ xx['suma'] %}
+                {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>TOTAL {{ totCom|round(2) }}</th>
+                <th>TOTAL</th>
+                <th>{{ tot | round(2) }}</th>
+            </tr>
+            </tfoot>
+        </table>
+        <!-- /.datos -->
+        
+        
+    {% endif %}
+    
+{% endblock %}
+

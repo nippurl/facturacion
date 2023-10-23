@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if docs is not empty %}
+        <h2>Documentos</h2>
+        <table class="datos">
+            <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Numero</th>
+                <th>Cliente</th>
+                <th>Productos</th>
+                <th>Forma de Pagos</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {# doc \App\Entity\Documento #}
+            {% for doc in docs %}
+                <tr>
+                    <td>{{ doc.fecha|date }}</td>
+                    <td>
+                        <a href="{{ path('documento_ver', {'id':doc.id}) }}">
+                            {{ doc }}
+                        </a>
+                    </td>
+                    <td>{{ doc.contacto }}</td>
+                    <td>{{ doc.productos|join(" - ") }}</td>
+                    <td>{{ doc.pagos|join("-") }}</td>
+
+                    <td>$ {{ doc.total }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+        <!-- /.datos -->
+        {% else %}
+        <h2>No hay Documentos con ese numero</h2>
+    {% endif %}
+    {% if clis is not empty %}
+        <h2>Clientes</h2>
+        {{ include('contacto/_cuadro_ver.html.twig',{'contactos':clis}) }}
+    {% else %}
+        <h2>No hay CLientes con ese dato</h2>
+    {% endif %}
+
+
+
+{% endblock %}
+{% block title %}
+Buscador
+{% endblock %}
+

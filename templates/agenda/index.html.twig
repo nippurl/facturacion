@@ -1,0 +1,144 @@
+{# @var agendas \App\Entity\Agenda[] #}
+{# @var areas \App\Entity\AgendaArea[] #}
+{# @var area1 \App\Entity\AgendaArea #}
+{# @var horarios \DateTime[] #}
+{# @var fecha \Datetime #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Lista de Agenda de {{ area1 }}de {{ fecha|date('d-m-Y') }}{% endblock %}
+
+{% block body %}
+
+    <div class="impresora">
+
+        <h1 >Lista de Agenda de {{ area1 }} de {{ fecha|date('d-m-Y') }}</h1>
+        <div class="row">
+            <div class=" col-12 col-md-3 no-print">
+                <div id="calendario">
+
+                </div>
+                <br>
+                <a href="{{ path('agenda_new') }}" class="new float-right, no-print">Nuevo</a>
+                <a href="javascript:imprimir('impresora');" class="btn btn-success float-right, no-print">Imprimir</a>
+                <h3>Areas</h3>
+
+                {% for area in areas %}
+                    <br>
+                    <a href="{{ path('agenda_index', { 'fecha':fecha, 'area':area.id }) }}" class="btn">
+                        {{ area }}
+                    </a>
+                {% endfor %}
+            </div>
+
+
+            <div class="col-12 col-md-9" id="horario">
+                <table class="datos text-center table-bordered">
+                    <thead class="">
+                    <th>Horario</th>
+
+                    {% for usuario in area1.usuarios %}
+                        <th class="text-center">{{ usuario.responsable }}</th>
+                    {% endfor %}
+                    </thead>
+                    <tbody>
+                    {% for hora in horarios %}
+
+
+                        <tr>
+                            <th>{{ hora|date('H:i') }}</th>
+
+                            {% for usuario in area1.usuarios %}
+
+                                {% set ban = 0 %}
+                                {% for agenda in agendas if ban== 0 %}
+                                    {# agenda.usuario.id == usuario.responsable.id and
+                        {{ dump( usuario.responsable.id )}}
+                        {{  dump (agenda.usuario.id) }} #}
+                                    {% if  agenda.hora.format('H:i') <= hora.format('H:i') and
+                                        agenda.horaFin.format('H:i') > hora.format('H:i') and
+                                        usuario.responsable.id == agenda.usuario.id %}
+                                        {% set ban=1 %}
+                                        {% if  agenda.hora.format('H:i') == hora.format('H:i') and
+                                            usuario.responsable.id == agenda.usuario.id %}
+                                            <td onclick="editar('{{ agenda.id }}' );"
+                                                rowspan="{{ agenda.duracionIntervalo }}">
+                                                {{ agenda.contacto }}({{ agenda.productos|join(', ') }})
+
+                                            </td>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if ban==0 %}
+                                    <td onclick="nuevo('{{ hora|date('H:i') }}','{{ usuario.responsable.id }}')">
+
+                                    </td>
+                                {% endif %}
+                            {% endfor %}
+
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css">
+    <script>
+        var fecha = '{{ "now" |date('Y-m-d') }}';
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendario');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                height: 500,
+                locale: 'es',
+                //contentHeight: 300,
+                views: {
+                    dayGridMonth: { // name of view
+                        titleFormat: {year: 'numeric', month: '2-digit'}
+                        // other view-specific options here
+                    }
+                },
+                dateClick: function (info) {
+                    //alert('clicked ' + info.dateStr);
+                    url = '{{ path('agenda_index', { 'area':area1.id }) }}&fecha=' + info.dateStr;
+                    window.location.replace(url);
+                }
+            });
+            //    calendar.setOption('locale', 'es');
+            calendar.render();
+
+
+        });
+
+    </script>
+    <script type="text/javascript">
+        function nuevo(hora, usuario) {
+            url = '{{ path('agenda_new') }}?fecha={{ fecha|date('Y-m-d') }}&hora=' + hora + '&usuario=' + usuario;
+            //   alert("URL :" + url);
+            window.location.replace(url);
+        }
+
+        function editar(agenda_id) {
+            url = '{{ path('agenda_edit') }}?id=' + agenda_id;
+            //    alert("URL :" + url);
+            window.location.replace(url);
+
+        }
+
+        function imprimir(el) {
+            var restorepage = $('body').html();
+            var printcontent = $('#' + el).clone();
+            $('body').empty().html(printcontent);
+            window.print();
+            $('body').html(restorepage);
+        }
+    </script>
+
+{% endblock %}

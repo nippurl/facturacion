@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ empresa_nombre}} - {% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.structure.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.theme.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+    {#       <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/bootstrap-grid.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/bootstrap-reboot.min.css') }}">
+    #}
+    {% block stylesheets %}
+
+    {% endblock %}
+
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/popper.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.form.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('js/select2.min.js') }}"></script>
+    <script src="{{ asset('js/base.js') }}"></script>
+    {% block javascripts %}{% endblock %}
+</head>
+
+<body class="fondo-blur"
+        {% if logo_empresa is defined %}
+       background="{{ asset(logo_empresa) }}"
+       {% endif %}
+>
+{% include 'menu.html.twig' %}
+
+<div class="container-fluid">
+    {% block body %}{% endblock %}
+</div>
+<div id="aux" class="modal-dialog modal-lg hidden " role="dialog" aria-labelledby="exampleModalVerticalLabel"
+     aria-hidden="true">
+</div>
+
+</body>
+</html>

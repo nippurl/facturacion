@@ -1,0 +1,30 @@
+{# \App\Entity\Contacto[] Contactos #}
+<table class="datos">
+    <thead>
+    <tr>
+        <th>Razon Social</th>
+
+        <th>Telefono</th>
+        <th>Fecha Cump</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for contacto in contactos %}
+        <tr>
+            <td>{{ contacto.razon }}</td>
+
+            <td>{{ contacto.telefono }}</td>
+            <td>{{ contacto.fechaNac?contacto.fechaNac|date:"" }}</td>
+            <td>
+                <a href="{{ path('contacto_show', {'id': contacto.id}) }}" class="show">Ver </a>
+                <a href="{{ path('contacto_edit', {'id': contacto.id}) }}" class="edit">Editar</a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="2">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

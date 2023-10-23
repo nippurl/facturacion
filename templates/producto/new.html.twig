@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nuevo Producto{% endblock %}
+
+{% block body %}
+    <h1>Nuevo Producto</h1>
+
+    {{ include('producto/_form.html.twig') }}
+
+    <a href="{{ path('producto_index') }}">Volver a la lista</a>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            /**
+             * Anulo en enter en el codbarra por la pistolas
+             */
+            $("#{{ form.codBarra.vars.id }}").keypress(function(e) {
+
+                if (e.which == 13) {
+                    //alert("preciono enter");
+                    return false;
+                }
+            });
+        });
+    </script>
+{% endblock %}

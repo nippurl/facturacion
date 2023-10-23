@@ -1,0 +1,283 @@
+{# doc \App\Entity\Documento #}
+
+{% extends 'base.html.twig' %}
+{% block title %} Documento  {% endblock %}
+{% block body %}
+    <div id="BOLETA">
+        {{ form_start(form,{'action': path('documento_editar',{'docId': doc.id}), 'method': 'GET','attr': {'id': 'formulario'} }) }}
+        <div class="float-center">
+            <h1 class="text-center"> {{ doc.tipo.letra }}</h1>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p>Empresa: {{ nombre_empresa }}</p>
+                <p> CUIL: {{ empresa_cuil }}</p>
+
+            </div>
+            <div class="col">
+                Fecha: {{ form_widget(form.fecha) }}
+                Numero: {{ form_widget(form.numero) }}
+
+            </div>
+            <!-- /.col -->
+        </div>
+
+
+        <!-- /.col -->
+        <h3>Para:</h3>
+        <div class="row no-print" style="width: 50%">
+
+          <div class="col-md-8 col-12">
+              {{ form_widget(form.contacto) }}
+          </div>
+         <div class="col-12 col-md-4">
+             {{ form_widget(form.agregar) }}
+         </div>
+
+        </div>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+
+        <div id="Contacto" class="row ">
+            {{ include ('contacto/datosDoc.hrml.twig',{'contacto':doc.contacto}) }}
+        </div>
+        <h3>Items</h3>
+        <div id="items">
+            {{ render(controller('App\\Controller\\ItemController:index', { 'doc' : doc.id  })) }}
+        </div>
+        <!-- /#items -->
+        {% if doc.tipo.pagos == 1 %}
+            <h3>Formas de Pagos</h3>
+            <div id="pagos">
+                {{ render(controller('App\\Controller\\PagoController:index', { 'doc': doc.id  })) }}
+            </div>
+        {% endif %}
+    </div>
+    <div id="accion">
+        <!--a href="{{ path('documento_cerrar',{'id': doc.id}) }}" class="btn btn-success " aria-disabled="true"
+           id="finalizar">Finalizar y Guardar</a-->
+        <a href="javascript:cerrar();" class="btn btn-success " aria-disabled="true"
+           id="finalizar">Finalizar y Guardar</a>
+        <a href="javascript:cerrarImprimir();" class="btn edit " aria-disabled="true"
+           id="finalizar">Finalizar, Guardar e imprimir</a>
+    </div>
+
+    <!-- /#accion -->
+
+
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+
+        function nuevoContacto() {
+            var url = '{{ path('contacto_newAjax',{'did':doc.id}) }}'
+            $('#aux').load(url,
+                function () {
+                    $('#aux').dialog({
+
+                        buttons: {
+
+                            "Guardar": function () {
+                                $.ajax({
+                                    url: url,                   //
+                                    timeout: 30000,
+                                    type: "POST",
+                                    data: $('#form_contacto').parent().serialize(),
+                                    //      dataType: 'json',
+                                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                        alert("An error has occurred making the request: " + errorThrown + " - " + $('#form_contacto').parent().serialize())
+                                    },
+                                    success: function (data) {
+                                        //Do stuff here on success such as modal info
+                                        $('#aux').dialog("close");
+                                        $('#doc_cab_contacto').append("<option id='" + data['id'] + "'> " + data['nombre'] + " </option>");
+                                        $('#doc_cab_contacto').val(data['nombre']);
+                                        cargaContacto(data['id']);
+                                    }
+                                });
+                            },
+                            "Cancelar": function () {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+
+
+                }
+            );
+        }
+
+        $("#form_contacto").on("submit", function (event) {
+            console.log($(this).serialize());
+            event.preventDefault();
+            //    var url = "{{ path('contacto_newAjax',{'did':doc.id}) }}";
+            var data = $(this).serialize();
+            $('#aux').load(url, data);
+            return false;
+        });
+
+        function guardarContacto() {
+            var url = "{{ path('contacto_newAjax',{'did':doc.id}) }}";
+            var data = $('#form_contacto').serialize();
+            //var data = new FormData($('#form_contacto'));
+            alert(data);
+            $('#aux').load({
+                url: url,
+                data: data,
+                type: 'post',
+            });
+        }
+
+        function CambiaProducto() {
+            var prodid = $('#item_producto').val()
+            var url = "{{ path('producto_ajax') }}?id=" + prodid;
+            // alert('Producto'+ prodid);
+
+            $.getJSON({
+                url: url,
+                success: function (data) {
+                    //  alert("PRod: " + data);
+                    $("#item_descripcion").val(data['descripcion']);
+                    $("#item_precioU").val(data['precio']);
+                    $("#item_codigo").val(prodid);
+                    calcular();
+                }
+            });
+        }
+
+        function calcular() {
+            var pu = $("#item_precioU").val();
+            var cant = $("#item_cantidad").val();
+            var tot = parseFloat(pu * cant);
+            $('#item_total').val(Math.round(tot * 100) / 100);
+            var ant = Number($('input#ant').val());
+            //  console.log("ANT " + ant);
+
+            var total = tot + ant;
+            $('#TOTAL').val(Math.round(total * 100) / 100);
+            var salto = saldo(total);
+            //    window.alert(total + "   "+pagado + "  " +saldo);
+            $('#pago_monto').val(saldo);
+            PagoCalcular();
+        }
+
+        function saldo() {
+            var total = $('#TOTAL').val();
+
+            var pagado = $('#pagado').val();
+            var saldo = Math.round((total - pagado) * 100) / 100;
+            return saldo;
+        }
+
+        /**
+         * Ajax para agregar item
+         */
+        function agregar(id) {
+            var url = "{{ path('item_edit', { 'doc': doc.id }) }}?id=" + id;
+            var data = $("form#form_items").serialize();
+            /*  $("form#form_items input").each(function() {
+                  data[theFieldName] = theFieldValue;
+              });*/
+
+            $("#items").load(url, data);
+        }
+
+
+        function cargaContacto(cod) {
+            if (cod == undefined) {
+                var conid = $('#doc_cab_contacto').val();
+
+            } else {
+                var conid = cod;
+            }
+            var did = "{{ doc.id }}";
+            var url = "{{ path('contacto_ajax') }}?id=" + conid + "&did=" + did;
+            // alert('Producto'+ prodid);
+
+            $("#Contacto").load(url);
+        }
+
+
+        function editar(id) {
+            var boton = "#edit_" + id;
+            $(boton).unbind('click', false);
+            $(boton).removeAttr("href");
+
+            var url = "{{ path('item_edit', { 'doc': doc.id }) }}?id=" + id;
+            //  var data = $("form#form_items ").serialize();
+
+            $("#items").load(url);
+        }
+
+        function borrar(id) {
+            var boton = "#delete_" + id;
+            $(boton).unbind('click', false);
+            $(boton).removeAttr("href");
+            var url = "{{ path('item_delete' ) }}?id=" + id;
+
+            $("#items").load(url);
+        }
+
+
+        function finalizar() {
+            var ant = Number($('input#ant').val());
+            var pagado = $('#pagado').val();
+            if (ant > 0 && pagado >= ant) {
+                $('#finalizar').removeClass('disabled');
+            } else {
+                $('#finalizar').addClass('disabled');
+            }
+        }
+
+        function cerrar() {
+            //     var url={{ path('documento_cerrar',{'id': doc.id}) }};
+            //   var datos = $("#{{ form.vars.id }}").serializeArray();
+            //   alert('ejecutando el cerrar: #formulario');
+            // $("#{{ form.vars.id }}").actions="{{ path('documento_cerrar',{'id': doc.id}) }}";
+            $("#formulario").submit();
+        }
+
+        function cerrarImprimir() {
+            //// Bloque de imprimir
+            /// Agrega el campo para imprimir
+            $("#formulario").append('<input type="hidden" name="imprimir" value="true" />');
+            cerrar();
+/* No funciona
+            var ficha = document.getElementById('BOLETA');
+            var ventimp = window.open(' ', 'popimpr');
+            ventimp.document.write( ficha.innerHTML );
+            ventimp.document.close();
+            ventimp.print( );
+            ventimp.close();
+*/
+
+        }
+
+
+        function select2_contacto() {
+            $('.select2.contacto').select2({
+                ajax: {
+                    url: '{{ path("contacto_findAjax") }}',
+                    dataType: 'json',
+                    type: 'GET',
+                    data: function (params) {
+                        var query = {
+                            search: params.term,
+                            //         type: 'public'
+                        }
+                        return query;
+                    },
+                }
+            });
+        }
+
+
+        $(document).ready(function(){
+            setTimeout(function(){
+                //    alert('pruenba');
+                select2_contacto();
+            },500);
+        });
+
+    </script>
+{% endblock %}
